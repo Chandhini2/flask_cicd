@@ -1,0 +1,100 @@
+pipeline {
+
+    agent any
+
+    environment {
+        MONGO_URI = credentials('mongo-uri')
+        SECRET_KEY = credentials('flask-secret')
+    }
+
+    stages {
+
+        stage('Build') {
+            steps {
+                echo '=== BUILD STAGE ==='
+                echo 'Installing Python dependencies...'
+
+                bat 'python --version'
+                bat 'python -m pip --version'
+                bat 'python -m pip install -r requirements.txt'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo '=== TEST STAGE ==='
+                echo 'Running unit tests...'
+
+                bat 'python -m pytest -v'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo '=== DEPLOY STAGE ==='
+                echo 'Deploying application to staging environment...'
+
+                bat '''
+                    if exist staging (
+                        rmdir /s /q staging
+                    )
+
+                    mkdir staging
+
+                    xcopy /E /I /Y templates staging\\templates
+                    copy app.py staging\\app.py
+                    copy requirements.txt staging\\requirements.txt
+
+                    echo Application deployed successfully to staging.
+                '''
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo '=== PIPELINE SUCCESS ==='
+
+            emailext(
+                subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+Jenkins pipeline completed successfully.
+
+Job: ${env.JOB_NAME}
+Build: #${env.BUILD_NUMBER}
+Status: SUCCESS
+
+Build URL:
+${env.BUILD_URL}
+""",
+                to: 'chandhini1940@outlook.com'
+            )
+        }
+
+        failure {
+            echo '=== PIPELINE FAILED ==='
+
+            emailext(
+                subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+Jenkins pipeline failed.
+
+Job: ${env.JOB_NAME}
+Build: #${env.BUILD_NUMBER}
+Status: FAILURE
+
+Please check the Jenkins console output.
+
+Build URL:
+${env.BUILD_URL}
+""",
+                to: 'chandhini1940@outlook.com'
+            )
+        }
+
+        always {
+            echo '=== PIPELINE COMPLETED ==='
+        }
+    }
+}
