@@ -1,6 +1,10 @@
 pipeline {
 
     agent any
+    
+    triggers {
+        githubPush()
+    }
 
     environment {
         MONGO_URI = credentials('mongo-uri')
