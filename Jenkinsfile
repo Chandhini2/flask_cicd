@@ -121,14 +121,14 @@ to: '[chandhini1940@outlook.com](mailto:chandhini1940@outlook.com)'
 )
 }
 
-```
+
     failure {
         echo '=== PIPELINE FAILED ==='
 
         emailext(
             subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
             body: """Jenkins pipeline failed.
-```
+
 
 Job: ${env.JOB_NAME}
 Build: #${env.BUILD_NUMBER}
@@ -143,7 +143,7 @@ to: '[chandhini1940@outlook.com](mailto:chandhini1940@outlook.com)'
 )
 }
 
-```
+
     always {
         echo '=== PIPELINE COMPLETED ==='
 
@@ -151,6 +151,6 @@ to: '[chandhini1940@outlook.com](mailto:chandhini1940@outlook.com)'
         sh 'rm -rf venv'
     }
 }
-```
+
 
 }
