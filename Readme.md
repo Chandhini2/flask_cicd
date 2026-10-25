@@ -412,20 +412,3 @@ Both approaches use automated testing and build validation to reduce manual effo
 
 ---
 
-# Part 7: Assignment Submission
-
-Before submitting, ensure the following deliverables are available:
-
-- [ ] GitHub repository containing the Flask application.
-- [ ] `Jenkinsfile` in the repository root.
-- [ ] GitHub Actions workflow under `.github/workflows/`.
-- [ ] Updated `README.md`.
-- [ ] Successful Jenkins pipeline execution evidence.
-- [ ] Successful GitHub Actions workflow execution evidence.
-- [ ] Repository URL saved in a text, Word, or PDF file for submission through VLearn.
-
-
-**GitHub Actions:**  
-`https://github.com/<your-username>/<your-repository>/actions`
-
-Replace the placeholders with your actual links before submitting the assignment.
